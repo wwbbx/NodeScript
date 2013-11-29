@@ -2,12 +2,141 @@
 /* Usage of this script*/
 
 /*
-    "TmeRelease build" will build the TMEPlatformAgent solution
+    "TmeRelease build" will build the TMEPlatformAgent solutionName
     "TmeRelease createPackage" will create TMEPlatformAgentSetup package
-    "TmeRelease test" will execute all function tests for TMEPlatformAgent solution
+    "TmeRelease test" will execute all function tests for TMEPlatformAgent solutionName
     "TmeRelease release" will release TMEPlatformAgentSetup package and ReleaseNote.txt
     "TmeRelease distribute" will distribute TMEPlatformAgentSetup package to TSPM
                             and Lighthouse software download web page.
 */
 
+var TmeRelease, path, subversion;
 
+path = require('path');
+
+subversion = require('./subversion');
+
+TmeRelease = (function() {
+  var build, compile, distribute, release, test, update, verifyScript;
+
+  function TmeRelease() {
+    this.svnRoot = "C:\\SVN\\HubDataServices\\Trunk";
+    this.tmeSolutionRelativePath = "Platforms\\TME\\PlatformAgents\\TMEPlatformAgentWin7";
+    this.setupProjectRelativePath = this.tmeSolutionRelativePath.replace('TmePlatformAgentWin7', 'TmePlatformAgentSetup');
+    this.solutionName = "TmePlatformAgentWin7.sln";
+    this.setupPackageName = "TmePlatformAgentSetup.msi";
+    this.releaseFolder = "";
+    this.tspmServer = "scgsbu08.scs.agilent.com";
+    this.lighthouseSoftwareServer = "www-ist.scs.agilent.com";
+    this.tspmReleasePath = "";
+    this.lighthouseDistPath = "";
+    this.packageVersion = "2.1.0";
+    this.devenvDefault = '';
+    this.devenv = '';
+  }
+
+  TmeRelease.prototype.updatePackageVersion = function() {
+    return "2.1.0";
+  };
+
+  TmeRelease.prototype.useDevenv = function(version) {
+    return this.devenv = this.devenvDefault.replace("version", version);
+  };
+
+  TmeRelease.prototype.getTmePlatformAgentSolution = function() {
+    var solutionNamePath;
+    solutionNamePath = path.join(this.svnRoot, this.tmeSolutionRelativePath);
+    return path.join(solutionNamePath, this.solutionName);
+  };
+
+  TmeRelease.prototype.getSetupPackageFullName = function() {
+    var setupProjectFullPath;
+    setupProjectFullPath = path.join(this.svnRoot, this.setupProjectRelativePath);
+    return path.join(setupProjectFullPath, "bin\\x86\\Debug\\" + this.setupPackageName);
+  };
+
+  TmeRelease.prototype.getVersionedPackageName = function() {
+    this.packageVersion = this.updatePackageVersion();
+    return "" + this.setupPackageName + ".replace('.msi', '')_" + this.packageVersion;
+  };
+
+  TmeRelease.prototype.getReleasedSetupPackage = function() {
+    return path.join(this.releaseFolder, this.getVersionedPackageName());
+  };
+
+  TmeRelease.prototype.getTspmDistributedPackage = function() {
+    var relativePackageName;
+    relativePackageName = path.join(this.tspmReleasePath, this.getVersionedPackageName());
+    return path.join("\\\\" + this.tspmServer, relativePackageName);
+  };
+
+  update = function() {
+    var svn;
+    "updating " + this.solutionName + " ...";
+    svn = new subversion();
+    return svn.update(getTmePlatformAgentSolution());
+  };
+
+  compile = function() {
+    if (!this.devenv) {
+      useDevenv('9.0');
+    }
+    return "compiling " + this.solutionName + " ...";
+  };
+
+  test = function() {
+    return "executing function test cases for " + this.solutionName + " ...";
+  };
+
+  build = function() {
+    return "building setup package for " + this.solutionName + " ...";
+  };
+
+  release = function() {
+    return "releasing package to shared folder for " + this.solutionName + " ...";
+  };
+
+  distribute = function() {
+    return "distributing package to TSPM and web page for " + this.solutionName + " ...";
+  };
+
+  verifyScript = function() {
+    var message;
+    message = "verifying this script switch function";
+    console.log(message);
+    return message;
+  };
+
+  TmeRelease.prototype.verifyProperty = function() {
+    var message;
+    message = 'verifying property';
+    console.log(message);
+    return message;
+  };
+
+  TmeRelease.prototype.execute = function(command) {
+    switch (command) {
+      case 'compile':
+        return compile();
+      case 'test':
+        return test();
+      case 'build':
+        return build();
+      case 'release':
+        return release();
+      case 'dist':
+        return distribute();
+      case 'verifyScript':
+        return verifyScript();
+      case 'verifyProperty':
+        return go(verifyProperty);
+      default:
+        return console.log('unknown command for TmeRelease');
+    }
+  };
+
+  return TmeRelease;
+
+})();
+
+module.exports = TmeRelease;
