@@ -217,4 +217,4 @@ pip-log.txt
 ##################
 ## node_modules ##
 ##################
-#./src/node_modules/
+./src/node_modules/
