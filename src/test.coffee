@@ -1,3 +1,5 @@
-tmeBuild = require './tmeBuild'
+sh = require 'execSync'
 
-tmeBuild.archive()
+result = sh.exec('dir c:\\temp')
+console.log result.stdout
+console.log 'command finished.'
