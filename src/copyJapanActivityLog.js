@@ -17,7 +17,7 @@ if (!fs.existsSync(source)) {
 
 now = new Date();
 
-archiveName = "ACTIVITY.hpujcsc3." + (now.getFullYear()) + (now.getMonth() + 1) + (now.getDate());
+archiveName = "ACTIVITY.hpujcsc3." + (now.getFullYear()) + (now.getMonth() + 1) + (now.getDate()) + (now.getHours()) + (now.getMinutes()) + (now.getSeconds());
 
 archiveFullPath = source.replace("ACTIVITY", archiveName);
 

@@ -1,0 +1,2 @@
+copyJapanActivityLog.coffee
+movePolarbearActivity.coffee
