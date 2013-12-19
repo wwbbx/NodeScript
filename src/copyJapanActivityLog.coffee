@@ -24,6 +24,7 @@ source = "X:\\srmuxroot\\STE9000\\SYSTEM\\ACTIVITY"
 if !fs.existsSync(source)
 	console.log "#{source} doesn't exist. Stopped."
 	console.log "You may need to map \\\\hpujcsc3.jpn.agilent.com\\srmuxroot to X: first."
+    
 	return
 
 now = new Date()
