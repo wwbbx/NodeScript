@@ -140,10 +140,11 @@
       # copy it to shared folder for releasing.
       command = "copy /Y /V #{source} #{target}"
       @run(command)
-      # copy ReleaseNote.txt to shared folder
-      # @CopyReleaseNote()
       # archive previous TMEPlatformAgent_*.msi except new copied one.
       @archive()
+
+      # copy ReleaseNote.txt to shared folder
+      @CopyReleaseNote()
 
   # distribute TMEPlatformAgentSetup to TSPM
   # and Lighthouse software download web page.
