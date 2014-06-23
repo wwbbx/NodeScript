@@ -116,16 +116,6 @@
       command = "\"#{devenv}\" #{solutionFullPath} /Project #{setupProjectFullPath} /Rebuild Debug x86"
       @run(command)
 
-
-      # TODO: make sure TMEPlatformAgent.msi is the latest.
-
-  # build VS2013 Integration Test Case Solution
-  exports.buildTestCases = ()->
-      console.log ""
-  	  console.log "Building VS2013 integration test cases solution ..."
-  	  command = "\"#{msbuild}\" #{integrationTestSolutionFullPath} /t:Rebuild /p:Configuration=Debug;Platform=x86"
-  	  @run(command)
-
   # execute Integration Test
   exports.runTestCases = ()->
       console.log ""
@@ -208,6 +198,13 @@
 
       # copy ReleaseNote.txt to shared folder
       @CopyReleaseNote()
+
+  # build VS2013 Integration Test Case Solution
+  exports.buildTestCases = ()->
+      console.log ""
+      console.log "Building VS2013 integration test cases solution ..."
+      command = "\"#{msbuild}\" #{integrationTestSolutionFullPath} /t:Rebuild /p:Configuration=Debug;Platform=x86"
+      @run(command)
 
   # print help information for user to use this script.
   exports.help = ()->
