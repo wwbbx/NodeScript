@@ -69,10 +69,17 @@
     @run(command)
 
   exports.update = ()->
+      tmePlatformAgentPath = path.join(svnRoot,  "Platforms\\TME")
+
+      # revert any local changes.
+      console.log "";
+      console.log "Reverting any local changes ..."
+      command = "svn revert -R -q #{tmePlatformAgentPath}"
+      @run(command, true)
+
       # Update source code calling svn command.
       console.log ""
       console.log "Updating source code from SVN ..."
-      tmePlatformAgentPath = path.join(svnRoot,  "Platforms\\TME")
       command = "svn update #{tmePlatformAgentPath}"
       @run(command, true)
 
